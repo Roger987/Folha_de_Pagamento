@@ -1,11 +1,17 @@
 public class Empregado{
 	public String nome;
 	public String endereco;
-	public String tipo;
-	public String metodo;
-	public boolean sindicato;
+	public int tipo;
+	public int metodopagamento;
+	public int sindicato;
+	public int numerosindicato;
 	public int numero;
-	public float horas;
-	public float vendas;
-	public float taxas;
+	public float salariofixo;
+	public float comissao = 0;
+	public float horas = 0;
+	public float horaextra = 0;
+	public float vendas = 0;
+	public float taxaservico = 0;
+	public float taxasindical = 0;
+	
 }
