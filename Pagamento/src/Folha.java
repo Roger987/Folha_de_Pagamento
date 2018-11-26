@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Calendar;
 
 public class Folha{
 	
@@ -10,7 +11,7 @@ public class Folha{
 		
 		String aux;
 		
-		System.out.println("Digite a operação desejada:\n\n1: Adição de empregado\n2:Remoção de empregado\n3:Lançar um cartão de ponto\n4: Lançar um resultado Venda\n5: Lançar uma taxa de serviço\n6: Alterar detalhes de um emprego\n7: Rodar a folha de pagamento para hoje\n8: Undo/redo\n9: Agenda de pagamento\n10: Criação de novas agendas de pagamento:\n0: Encerrar o programa\n");
+		System.out.println("Digite a operação desejada:\n\n1: Adição de empregado\n2: Remoção de empregado\n3: Lançar um cartão de ponto\n4: Lançar um resultado Venda\n5: Lançar uma taxa de serviço\n6: Alterar detalhes de um emprego\n7: Rodar a folha de pagamento para hoje\n8: Undo/redo\n9: Agenda de pagamento\n10: Criação de novas agendas de pagamento:\n0: Encerrar o programa\n");
 
 		
 		java.util.ArrayList<Empregado> empregados = new java.util.ArrayList<Empregado>();
@@ -238,24 +239,19 @@ public class Folha{
 			    			 System.out.println("Operação inválida");
 			    		 }
 			    case 7:
-			    		 System.out.println("Informe o dia, o mês e o ano, separados por uma quebra de linha:");
 			    		 
 			    		 int i;
-			    		 int dia = scanner.nextInt();
-			    		 int mes = scanner.nextInt();
-			    		 int ano = scanner.nextInt();
-			    		 aux = scanner.nextLine();
+			    		 int diames = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			 			 int ultimodiames = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
+			 			 int diasemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+			 			 int paridade = Calendar.getInstance().get(Calendar.DAY_OF_WEEK_IN_MONTH);
 			    		 
-			    		 System.out.println("Informe o dia da semana:");
-			    		 
-			    		 String diasemana = scanner.nextLine();
-			    		 
-			    		 System.out.println("Data:" + dia + "/" + mes + "/" + ano + ", " + diasemana);
+			    		 System.out.println("Data: " + diames + "/" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR));
 			    		 System.out.println("-------------------------------------------------------------------------------\n");
 			    		 
 			    		 for(i = 0; i < num; i++) {
 			    			 
-			    			 if((empregados.get(i).tipo == 1)&&(diasemana.charAt(2) == 'x')) {
+			    			 if((empregados.get(i).tipo == 1)&&(diasemana == 6)) {
 			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço:" + empregados.get(i).endereco);
 			    				 System.out.println("Tipo: Horista          Método de pagamento: " + empregados.get(i).metodopagamento);
 			    				 if(empregados.get(i).sindicato == 1) {
@@ -267,7 +263,7 @@ public class Folha{
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
 			    			 }
 			    			 
-			    			 else if((empregados.get(i).tipo == 2)) {
+			    			 else if((empregados.get(i).tipo == 2)&&(diames == ultimodiames)&&(diasemana != 1)&&(diasemana != 7)) {
 			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço:" + empregados.get(i).endereco);
 			    				 System.out.println("Tipo: Assalariado          Método de pagamento: " + empregados.get(i).metodopagamento);
 			    				 if(empregados.get(i).sindicato == 1) {
@@ -279,7 +275,7 @@ public class Folha{
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
 			    			 }
 			    			 
-			    			 else if((empregados.get(i).tipo == 3)) {
+			    			 else if((empregados.get(i).tipo == 3)&&(diasemana == 1)&&(paridade%2 == 0)) {
 			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço:" + empregados.get(i).endereco);
 			    				 System.out.println("Tipo: Assalariado          Método de pagamento: " + empregados.get(i).metodopagamento);
 			    				 if(empregados.get(i).sindicato == 1) {
@@ -291,11 +287,13 @@ public class Folha{
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
 			    			 }
 			    			 
-			    			 
+			    				 
 			    		 }
 			    
+			    case 8:
 			    	
-			            
+
+
 			}
 			System.out.println("\nDigite a operação desejada:\n\n1: Adição de empregado\n2:Remoção de empregado\n3:Lançar um cartão de ponto\n4: Lançar um resultado Venda\n5: Lançar uma taxa de serviço\n6: Alterar detalhes de um emprego\n7: Rodar a folha de pagamento para hoje\n8: Undo/redo\n9: Agenda de pagamento\n10: Criação de novas agendas de pagamento:\n0: Encerrar o programa\n");
 			
