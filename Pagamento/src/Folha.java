@@ -7,7 +7,8 @@ public class Folha{
 		
 		Scanner scanner = new Scanner(System.in);
 		
-		int input = -1, num = 0, numsindicato = 0;
+		int input = -1, num = 0, numsindicato = 0, dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH), mes = Calendar.getInstance().get(Calendar.MONTH) + 1, ano = Calendar.getInstance().get(Calendar.YEAR);
+		int diasemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK), flag = 0;
 		
 		String aux;
 		
@@ -111,16 +112,21 @@ public class Folha{
 				    		 System.out.println("\nDigite o horário de saída:\n");
 				    		 saida = scanner.nextFloat();
 				    		 
-				    		 diferencahoras = saida - entrada;
-				    		 
-				    		 if(diferencahoras <= 8) {
-				    			 empregados.get(index2).horas += diferencahoras;
+				    		 if(saida > entrada) {
+				    			 diferencahoras = saida - entrada;
+					    		 
+					    		 if(diferencahoras <= 8) {
+					    			 empregados.get(index2).horas += diferencahoras;
+					    		 }
+					    		 else {
+					    			 empregados.get(index2).horas += 8;
+					    			 empregados.get(index2).horaextra += (diferencahoras - 8);
+					    		 }
+				    			 
 				    		 }
 				    		 else {
-				    			 empregados.get(index2).horas += 8;
-				    			 empregados.get(index2).horaextra += (diferencahoras - 8);
+				    			 System.out.println("Horários inválidos.");
 				    		 }
-				    		 
 	 
 			    		 }
 			    		 else {
@@ -238,22 +244,29 @@ public class Folha{
 			    		 else {
 			    			 System.out.println("Operação inválida");
 			    		 }
+			    		 
+			    		 break;
 			    case 7:
 			    		 
 			    		 int i;
-			    		 int diames = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-			 			 int ultimodiames = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
-			 			 int diasemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-			 			 int paridade = Calendar.getInstance().get(Calendar.DAY_OF_WEEK_IN_MONTH);
 			    		 
-			    		 System.out.println("Data: " + diames + "/" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR));
+			    		 System.out.println("Data: " + dia + "/" + mes + "/" + ano);
 			    		 System.out.println("-------------------------------------------------------------------------------\n");
 			    		 
 			    		 for(i = 0; i < num; i++) {
 			    			 
 			    			 if((empregados.get(i).tipo == 1)&&(diasemana == 6)) {
-			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço:" + empregados.get(i).endereco);
-			    				 System.out.println("Tipo: Horista          Método de pagamento: " + empregados.get(i).metodopagamento);
+			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço: " + empregados.get(i).endereco);
+			    				 System.out.print("Tipo: Horista          Método de pagamento: ");
+			    				 if(empregados.get(i).metodopagamento == 1) {
+			    					 System.out.println("Cheque pelo correio.");
+			    				 }
+			    				 else if(empregados.get(i).metodopagamento == 2) {
+			    					 System.out.println("Cheque em mãos.");
+			    				 }
+			    				 else if(empregados.get(i).metodopagamento == 3) {
+			    					 System.out.println("Débito em conta.");
+			    				 }
 			    				 if(empregados.get(i).sindicato == 1) {
 			    					 System.out.println("Identificação no sindicato: " + empregados.get(i).numerosindicato + "          Total de taxas do sindicato: " + (empregados.get(i).taxasindical + empregados.get(i).taxaservico) + "%");
 			    				 }
@@ -263,9 +276,18 @@ public class Folha{
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
 			    			 }
 			    			 
-			    			 else if((empregados.get(i).tipo == 2)&&(diames == ultimodiames)&&(diasemana != 1)&&(diasemana != 7)) {
-			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço:" + empregados.get(i).endereco);
-			    				 System.out.println("Tipo: Assalariado          Método de pagamento: " + empregados.get(i).metodopagamento);
+			    			 else if((empregados.get(i).tipo == 2)&&(dia == 30)&&(diasemana != 1)&&(diasemana != 7)) {
+			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço: " + empregados.get(i).endereco);
+			    				 System.out.print("Tipo: Assalariado          Método de pagamento: ");
+			    				 if(empregados.get(i).metodopagamento == 1) {
+			    					 System.out.println("Cheque pelo correio.");
+			    				 }
+			    				 else if(empregados.get(i).metodopagamento == 2) {
+			    					 System.out.println("Cheque em mãos.");
+			    				 }
+			    				 else if(empregados.get(i).metodopagamento == 3) {
+			    					 System.out.println("Débito em conta.");
+			    				 }
 			    				 if(empregados.get(i).sindicato == 1) {
 			    					 System.out.println("Identificação no sindicato: " + empregados.get(i).numerosindicato + "          Total de taxas do sindicato: " + (empregados.get(i).taxasindical + empregados.get(i).taxaservico) + "%");
 			    				 }
@@ -275,27 +297,79 @@ public class Folha{
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
 			    			 }
 			    			 
-			    			 else if((empregados.get(i).tipo == 3)&&(diasemana == 1)&&(paridade%2 == 0)) {
-			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço:" + empregados.get(i).endereco);
-			    				 System.out.println("Tipo: Assalariado          Método de pagamento: " + empregados.get(i).metodopagamento);
-			    				 if(empregados.get(i).sindicato == 1) {
+			    			 else if((empregados.get(i).tipo == 3)&&(diasemana == 6)&&(flag%2 == 0)) {
+			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço: " + empregados.get(i).endereco);
+			    				 System.out.print("Tipo: Comissionado          Método de pagamento: ");
+			    				 if(empregados.get(i).metodopagamento == 1) {
+			    					 System.out.println("Cheque pelo correio.");
+			    				 }
+			    				 else if(empregados.get(i).metodopagamento == 2) {
+			    					 System.out.println("Cheque em mãos.");
+			    				 }
+			    				 else if(empregados.get(i).metodopagamento == 3) {
+			    					 System.out.println("Débito em conta.");
+			    				 }			    				 if(empregados.get(i).sindicato == 1) {
 			    					 System.out.println("Identificação no sindicato: " + empregados.get(i).numerosindicato + "          Total de taxas do sindicato: " + (empregados.get(i).taxasindical + empregados.get(i).taxaservico) + "%");
 			    				 }
 			    				 double salario = empregados.get(i).salariofixo + (empregados.get(i).vendas * (empregados.get(i).comissao)/100);
 			    				 salario = salario - (salario * ((empregados.get(i).taxasindical + empregados.get(i).taxaservico)/100));
 			    				 System.out.println("Valor do salário: " + salario);
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
+			    				 flag++;
 			    			 }
-			    			 
 			    				 
 			    		 }
+		    			 dia++;
+		    			 diasemana++;
+		    			 if(dia == 31) {
+		    				 dia = 1;
+		    				 mes++;
+		    			 }
+		    			 if((dia == 30)&&(mes == 12)) {
+		    				 ano++;
+		    			 }
+		    			 if(diasemana == 8) {
+		    				 diasemana = 1;
+		    			 }
+		    			 break;
 			    
-			    case 8:
+			    //case 8:
 			    	
-
-
+			    case 9:
+			    	System.out.println("AGENDA DE PAGAMENTO:");
+			    	System.out.println("\n-------------------------------------------------------------------------------\n");
+			    	System.out.println("Empregados pagos semanalmente:\n");
+			    	for(i = 0; i < num; i++){
+			    		if(empregados.get(i).tipo == 1) {
+			    			System.out.println("   - " + empregados.get(i).nome);
+			    		}
+			    		
+			    	}
+			    	System.out.println("\n-------------------------------------------------------------------------------\n");
+			    	System.out.println("Empregados pagos bi-semanalmente:\n");
+			    	for(i = 0; i < num; i++){
+			    		if(empregados.get(i).tipo == 3) {
+			    			System.out.println("   - " + empregados.get(i).nome);
+			    		}
+			    		
+			    	}
+			    	System.out.println("\n-------------------------------------------------------------------------------\n");
+			    	System.out.println("Empregados pagos mensalmente:\n");
+			    	for(i = 0; i < num; i++){
+			    		if(empregados.get(i).tipo == 2) {
+			    			System.out.println("   - " + empregados.get(i).nome);
+			    		}
+			    		
+			    	}
+			    	break;
+			    case 10:
+			    	System.out.println("Insira a nova agenda de pagamento:");
+			    	String agendanova = scanner.nextLine();
+			    	
+			    	break;
+			    	
 			}
-			System.out.println("\nDigite a operação desejada:\n\n1: Adição de empregado\n2:Remoção de empregado\n3:Lançar um cartão de ponto\n4: Lançar um resultado Venda\n5: Lançar uma taxa de serviço\n6: Alterar detalhes de um emprego\n7: Rodar a folha de pagamento para hoje\n8: Undo/redo\n9: Agenda de pagamento\n10: Criação de novas agendas de pagamento:\n0: Encerrar o programa\n");
+			System.out.println("\nDigite a operação desejada:\n\n1: Adição de empregado\n2: Remoção de empregado\n3: Lançar um cartão de ponto\n4: Lançar um resultado Venda\n5: Lançar uma taxa de serviço\n6: Alterar detalhes de um emprego\n7: Rodar a folha de pagamento para hoje\n8: Undo/redo\n9: Agenda de pagamento\n10: Criação de novas agendas de pagamento:\n0: Encerrar o programa\n");
 			
 		}
 		
