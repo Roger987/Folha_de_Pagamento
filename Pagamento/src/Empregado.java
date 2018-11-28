@@ -13,5 +13,6 @@ public class Empregado{
 	public float vendas = 0;
 	public float taxaservico = 0;
 	public float taxasindical = 0;
+	public int agendanovatipo;
 	
 }

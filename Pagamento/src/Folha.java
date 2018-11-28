@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Calendar;
+import java.util.*; 
 
 public class Folha{
 	
@@ -7,8 +8,8 @@ public class Folha{
 		
 		Scanner scanner = new Scanner(System.in);
 		
-		int input = -1, num = 0, numsindicato = 0, dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH), mes = Calendar.getInstance().get(Calendar.MONTH) + 1, ano = Calendar.getInstance().get(Calendar.YEAR);
-		int diasemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK), flag = 0;
+		int input = -1, num = 0, numsindicato = 0, flag = 0, dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH), mes = Calendar.getInstance().get(Calendar.MONTH) + 1, ano = Calendar.getInstance().get(Calendar.YEAR);
+		int diasemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 		
 		String aux;
 		
@@ -16,13 +17,17 @@ public class Folha{
 
 		
 		java.util.ArrayList<Empregado> empregados = new java.util.ArrayList<Empregado>();
+		//java.util.ArrayList<Empregado> empregadoscopia = new java.util.ArrayList<Empregado>();
+
 		
 		
 		while(input != 0) {
 			
+			
 			input = scanner.nextInt();
 			
 			aux = scanner.nextLine();
+			
 			
 			if(input == 0) {
 				System.out.println("Programa encerrado");
@@ -91,6 +96,7 @@ public class Folha{
 						 
 						 String funcionario = empregados.get(index).nome;
 						 empregados.remove(index);
+						 num--;
 						 System.out.println("\n" + funcionario + " removido do sistema.\n");
 				         
 						 break;
@@ -100,20 +106,22 @@ public class Folha{
 			    		 System.out.println("\nDigite o número do funcionário:\n");
 			    		 
 			    		 int index2;
-			    		 float entrada, saida, diferencahoras;
+			    		 float entradahora, entradamin, saidahora, saidamin, diferencahoras;
 			    		 
 			    		 index2 = scanner.nextInt();
 			    		 aux = scanner.nextLine();
 			    		 
 			    		 if(empregados.get(index2).tipo == 1) {
-			    			 System.out.println("Digite o horário de entrada:\n");
-				    		 entrada = scanner.nextFloat();
+			    			 System.out.println("Digite a hora e os minutos de entrada separados por uma quebra de linha:\n");
+				    		 entradahora = scanner.nextFloat();
+				    		 entradamin = scanner.nextFloat();
 				    		 
-				    		 System.out.println("\nDigite o horário de saída:\n");
-				    		 saida = scanner.nextFloat();
+				    		 System.out.println("\nDigite a hora e os minutos de saída separados por uma quebra de linha:\n");
+				    		 saidahora = scanner.nextFloat();
+				    		 saidamin = scanner.nextFloat();
 				    		 
-				    		 if(saida > entrada) {
-				    			 diferencahoras = saida - entrada;
+				    		 if(saidahora > entradahora) {
+				    			 diferencahoras = ((saidahora - entradahora) + ((1/60)*saidamin - (1/60)*entradamin));
 					    		 
 					    		 if(diferencahoras <= 8) {
 					    			 empregados.get(index2).horas += diferencahoras;
@@ -122,6 +130,9 @@ public class Folha{
 					    			 empregados.get(index2).horas += 8;
 					    			 empregados.get(index2).horaextra += (diferencahoras - 8);
 					    		 }
+					    		 System.out.println("CARTÃO DE PONTO\n-------------------------------------------\n");
+					    		 System.out.println(empregados.get(index2).nome + "\nEntrada: " + (int) entradahora + ":" + (int) entradamin + "\nSaída: " + (int) saidahora + ":" + (int) saidamin + "\nTotal de horas: " + diferencahoras + "h");
+					    		 
 				    			 
 				    		 }
 				    		 else {
@@ -145,6 +156,8 @@ public class Folha{
 						    	
 					    	 float venda = scanner.nextFloat();
 					    	 empregados.get(index3).vendas += venda;
+					    	 
+					    	 System.out.println("RESULTADO DE VENDA:\n----------------------------------------\nFuncionário: " + empregados.get(index3).nome + "\nResultado: $" + venda);
 				    		 
 				    	 }
 				    	 
@@ -166,6 +179,8 @@ public class Folha{
 						    	
 					    	 float taxa = scanner.nextFloat();
 					    	 empregados.get(index4).taxaservico = taxa;
+					    	 
+					    	 System.out.println("Taxa de serviço adicionada.");
 				    	 }
 				    	 else {
 				    		 System.out.println("O funcionário não faz parte do sindicato.");
@@ -207,6 +222,22 @@ public class Folha{
 			    			 int novotipo = scanner.nextInt();
 			    			 empregados.get(index5).tipo = novotipo;
 			    			 
+			    			 if(novotipo == 1) {
+									System.out.println("Informe o salário por hora trabalhada:");
+									empregados.get(index5).salariofixo = scanner.nextFloat();
+							 }
+								
+							 else if(novotipo == 2) {
+									System.out.println("Informe o salário mensal:");
+									empregados.get(index5).salariofixo = scanner.nextFloat();
+							 }
+								
+							 else if(novotipo == 3) {
+									System.out.println("Informe o salário bi-semanal:");
+									empregados.get(index5).salariofixo = scanner.nextFloat();
+									System.out.println("Informe o percentual da comissão:");
+									empregados.get(index5).comissao = scanner.nextFloat();
+							 }			    			 
 			    			 System.out.println("\nTipo alterado com sucesso.\n");
 			    		 }
 			    		 else if(choice == 4) {
@@ -229,9 +260,15 @@ public class Folha{
 			    			 System.out.println("Digite sua nova identificação no sindicato:\n");
 			    			 
 			    			 int novoid = scanner.nextInt();
-			    			 empregados.get(index5).numerosindicato = novoid;
-			    			 
-			    			 System.out.println("\nIdentificação no sindicato alterada com sucesso.\n");
+			    			 if(novoid <= num) {
+			    				 System.out.println("Número inválido.\nTente novamente.");
+			    			 }
+			    			 else {
+			    				 empregados.get(index5).numerosindicato = novoid;
+				    			 
+				    			 System.out.println("\nIdentificação no sindicato alterada com sucesso.\n");
+			    			 }
+			    			
 			    		 }
 			    		 else if(choice == 7) {
 			    			 System.out.println("Digite a taxa sindical:\n");
@@ -297,7 +334,7 @@ public class Folha{
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
 			    			 }
 			    			 
-			    			 else if((empregados.get(i).tipo == 3)&&(diasemana == 6)&&(flag%2 == 0)) {
+			    			 else if((empregados.get(i).tipo == 3)&&(diasemana == 6)&&((flag%2 == 0)||(flag == 0))) {
 			    				 System.out.println("Nome: " + empregados.get(i).nome + "          Endereço: " + empregados.get(i).endereco);
 			    				 System.out.print("Tipo: Comissionado          Método de pagamento: ");
 			    				 if(empregados.get(i).metodopagamento == 1) {
@@ -315,7 +352,6 @@ public class Folha{
 			    				 salario = salario - (salario * ((empregados.get(i).taxasindical + empregados.get(i).taxaservico)/100));
 			    				 System.out.println("Valor do salário: " + salario);
 			    				 System.out.println("\n-------------------------------------------------------------------------------\n");
-			    				 flag++;
 			    			 }
 			    				 
 			    		 }
@@ -325,22 +361,28 @@ public class Folha{
 		    				 dia = 1;
 		    				 mes++;
 		    			 }
-		    			 if((dia == 30)&&(mes == 12)) {
+		    			 if((dia == 31)&&(mes == 13)) {
 		    				 ano++;
+		    				 mes = 1;
 		    			 }
 		    			 if(diasemana == 8) {
 		    				 diasemana = 1;
 		    			 }
+		    			 else if(diasemana == 6) {
+		    				 flag++;
+		    			 }
 		    			 break;
 			    
-			    //case 8:
+			    case 8:
+					break;
+					
 			    	
 			    case 9:
 			    	System.out.println("AGENDA DE PAGAMENTO:");
 			    	System.out.println("\n-------------------------------------------------------------------------------\n");
 			    	System.out.println("Empregados pagos semanalmente:\n");
 			    	for(i = 0; i < num; i++){
-			    		if(empregados.get(i).tipo == 1) {
+			    		if((empregados.get(i).tipo == 1)||(empregados.get(i).tipo == 4 && empregados.get(i).agendanovatipo == 2)) {
 			    			System.out.println("   - " + empregados.get(i).nome);
 			    		}
 			    		
@@ -356,16 +398,34 @@ public class Folha{
 			    	System.out.println("\n-------------------------------------------------------------------------------\n");
 			    	System.out.println("Empregados pagos mensalmente:\n");
 			    	for(i = 0; i < num; i++){
-			    		if(empregados.get(i).tipo == 2) {
+			    		if(empregados.get(i).tipo == 2||(empregados.get(i).tipo == 4 && empregados.get(i).agendanovatipo == 1)) {
 			    			System.out.println("   - " + empregados.get(i).nome);
 			    		}
 			    		
 			    	}
 			    	break;
 			    case 10:
-			    	System.out.println("Insira a nova agenda de pagamento:");
+			    	System.out.println("Informe o número do funcionário:");
+			    	int input10 = scanner.nextInt();
+			    	aux = scanner.nextLine();
+			    	
+			    	System.out.println("Digite a frequência de pagamento, Mensal ou Semanal, caso seja mensal, digite o dia no qual deseja ser pago, caso seja semanal, informe o intervalo de semanas no qual deseja ser pago e o dia da semana no qual deseja ser pago.\nConsidere o último dia útil do mês como $.");
 			    	String agendanova = scanner.nextLine();
 			    	
+			    	if(agendanova.charAt(2) == 'n') {
+			    		
+			    		empregados.get(input10).agendanovatipo = 1;
+			    		empregados.get(input10).tipo = 4;
+			    		
+			    		
+			    		System.out.println("Nova agenda: " + agendanova);
+			    	}
+			    	else if(agendanova.charAt(2) == 'm') {
+			    		empregados.get(input10).agendanovatipo = 2;
+			    		empregados.get(input10).tipo = 4;
+			    		
+			    		System.out.println("Nova agenda: " + agendanova);
+			    	}
 			    	break;
 			    	
 			}
