@@ -9,7 +9,7 @@ public class Folha{
 		Scanner scanner = new Scanner(System.in);
 		
 		int input = -1, num = 0, numsindicato = 0, flag = 0, dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH), mes = Calendar.getInstance().get(Calendar.MONTH) + 1, ano = Calendar.getInstance().get(Calendar.YEAR);
-		int diasemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int diasemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK), op = 0;
 		
 		String aux;
 		
@@ -17,8 +17,9 @@ public class Folha{
 
 		
 		java.util.ArrayList<Empregado> empregados = new java.util.ArrayList<Empregado>();
-		//java.util.ArrayList<Empregado> empregadoscopia = new java.util.ArrayList<Empregado>();
-
+		java.util.ArrayList<Empregado> empregadoscopia = new java.util.ArrayList<Empregado>();
+		Stack<ArrayList<Empregado>> undo = new Stack<ArrayList<Empregado>>();
+		Stack<ArrayList<Empregado>> redo = new Stack<ArrayList<Empregado>>();
 		
 		
 		while(input != 0) {
@@ -28,11 +29,40 @@ public class Folha{
 			
 			aux = scanner.nextLine();
 			
+			if(input < 8 && input > 0) {
+				int j;
+				Empregado empregadocopia;
+				empregadocopia = new Empregado();
+				if(op > 0) {
+					for(j = 0; j < num; j++) {
+						empregadocopia.nome = empregados.get(j).nome;
+						empregadocopia.endereco = empregados.get(j).endereco;
+						empregadocopia.tipo = empregados.get(j).tipo;
+						empregadocopia.metodopagamento = empregados.get(j).metodopagamento;
+						empregadocopia.sindicato = empregados.get(j).sindicato;
+						empregadocopia.numerosindicato = empregados.get(j).numerosindicato;
+						empregadocopia.numero = empregados.get(j).numero;
+						empregadocopia.salariofixo = empregados.get(j).salariofixo;
+						empregadocopia.comissao = empregados.get(j).comissao;
+						empregadocopia.horas = empregados.get(j).horas;
+						empregadocopia.horaextra = empregados.get(j).horaextra;
+						empregadocopia.vendas = empregados.get(j).vendas;
+						empregadocopia.taxaservico = empregados.get(j).taxaservico;
+						empregadocopia.taxasindical = empregados.get(j).taxasindical;
+						empregadocopia.agendanovatipo = empregados.get(j).agendanovatipo;
+						
+						empregadoscopia.add(empregadocopia);
+					}
+					undo.push(empregadoscopia);
+				}
+				op++;
+			}
 			
 			if(input == 0) {
 				System.out.println("Programa encerrado");
 				break;
 			}
+			
 			
 			switch(input)
 			{
@@ -357,13 +387,14 @@ public class Folha{
 			    		 }
 		    			 dia++;
 		    			 diasemana++;
-		    			 if(dia == 31) {
-		    				 dia = 1;
-		    				 mes++;
-		    			 }
-		    			 if((dia == 31)&&(mes == 13)) {
+		    			 if((dia == 31)&&(mes == 12)) {
 		    				 ano++;
 		    				 mes = 1;
+		    				 dia = 1;
+		    			 }
+		    			 if(dia == 31 && mes != 12) {
+		    				 dia = 1;
+		    				 mes++;
 		    			 }
 		    			 if(diasemana == 8) {
 		    				 diasemana = 1;
@@ -374,7 +405,21 @@ public class Folha{
 		    			 break;
 			    
 			    case 8:
-					break;
+			    	System.out.println("Digite a operação desejada:\n 1 - undo\n 2 - redo\n");
+			    	int y = scanner.nextInt();
+			    	if(op > 0) {
+				    	if(y == 1) {
+				    		redo.push(empregados);
+				    		empregados = undo.pop();
+				    		System.out.println("Sucesso!");
+				    	}
+				    	else if(y == 2) {
+				    		undo.push(empregados);
+				    		empregados = redo.pop();
+				    		System.out.println("Sucesso!");
+				    	}
+			    	}
+			    	break;
 					
 			    	
 			    case 9:
